@@ -1,0 +1,100 @@
+### **🛠 Workflow Design for AI Desktop Assistant**  
+
+The assistant will process **voice and text inputs**, determine the **intent and target**, and execute tasks **while maintaining a conversation**.  
+
+---
+
+## **📌 High-Level Workflow**  
+### **1️⃣ User Input (Voice/Text)**
+- User gives a command via **voice** or **text**  
+- If **voice**, convert to text using **Speech-to-Text API**  
+- Pass the command to **Query Processor**  
+
+### **2️⃣ Query Processor (Brain)**
+- **Pre-prompted Gemini Flash 2.0** determines **[Action, Target]**  
+- Calls the **appropriate module** to execute the task  
+
+### **3️⃣ Task Execution**
+- **Multithreading:**  
+  - **Foreground** → Gemini chatbot for user interaction  
+  - **Background** → Execution of user-requested tasks  
+
+### **4️⃣ Speech Response**
+- Assistant provides real-time **voice and text updates**  
+- Uses **Text-to-Speech (TTS)** for speaking  
+
+---
+
+## **📂 Python Modules & Their Roles**
+| **Module**              | **Purpose** |
+|-------------------------|------------|
+| `main.py` | Entry point of the assistant |
+| `query_processor.py` | Determines **[Action, Target]** from user input |
+| `voice_assistant.py` | Handles **Speech-to-Text & Text-to-Speech** |
+| `task_manager.py` | Manages background tasks & multithreading |
+| `file_handler.py` | Searches, opens, presents files |
+| `app_launcher.py` | Opens apps like **Notepad, WhatsApp, Browser** |
+| `models/gemini_api.py` | Connects to **Gemini Flash 2.0** for AI responses |
+| `models/local_ai.py` | Handles **offline AI** tasks (e.g., summarization) |
+| `models/ocr.py` | Extracts text from **scanned documents** |
+
+---
+
+## **🔄 Detailed Workflow**
+### **📌 Step 1: Receive User Query**
+- **Text Input:** Directly passed to `query_processor.py`  
+- **Voice Input:**  
+  1. Converted to text using `voice_assistant.py`  
+  2. Passed to `query_processor.py`  
+
+### **📌 Step 2: Query Processor Determines Intent**
+- Extracts **[Action, Target]** from query  
+- Calls the appropriate module to handle the task  
+
+📌 **Example Queries & Their Action-Target Mapping**
+| **User Query** | **Action** | **Target** | **Module Called** |
+|--------------|---------|--------|---------------|
+| "Find my resume" | `search` | `resume.pdf` | `file_handler.py` |
+| "Open my project report" | `open` | `project_report.docx` | `file_handler.py` |
+| "Present my slides" | `present` | `presentation.pptx` | `file_handler.py` |
+| "Open WhatsApp" | `open` | `whatsapp` | `app_launcher.py` |
+| "Summarize this document" | `summarize` | `document.pdf` | `models/local_ai.py` |
+
+---
+
+### **📌 Step 3: Task Execution**
+- `task_manager.py` runs the task in **the background**
+- **Assistant keeps responding in real-time**  
+- Uses **multithreading** to allow chatting while tasks execute  
+
+---
+
+### **📌 Step 4: Assistant Response**
+- Text response is generated via **Gemini Flash 2.0**  
+- Speech response via **TTS (Text-to-Speech)**  
+- If an error occurs, **Assistant notifies the user**  
+
+---
+
+## **📌 Technologies & Libraries**
+| **Function** | **Technology/Library** |
+|-------------|--------------------|
+| **AI Model** | Google Gemini Flash 2.0 |
+| **Voice Recognition** | `speech_recognition` (Google STT) |
+| **Text-to-Speech** | `pyttsx3` or ElevenLabs API |
+| **Multithreading** | Python `threading` module |
+| **File Handling** | Python `os` and `glob` modules |
+| **OCR (Text from Images/PDFs)** | `pytesseract` + `pdf2image` |
+| **Web Search** | Gemini API for online queries |
+
+---
+
+## **✅ Next Steps**
+1. **Set up Gemini-powered Query Processor**
+2. **Implement Voice Input & Speech Output**
+3. **Develop File & App Handling Modules**
+4. **Integrate Multithreading for Task Execution**  
+
+---
+
+🚀 **Is this structure aligned with what you need?**
